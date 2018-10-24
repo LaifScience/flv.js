@@ -831,7 +831,7 @@ class FLVDemuxer {
             // Ignore all the video packets
             return;
         }
-
+        console.log(tagTimestamp);
         let spec = (new Uint8Array(arrayBuffer, dataOffset, dataSize))[0];
 
         let frameType = (spec & 240) >>> 4;
@@ -1077,7 +1077,6 @@ class FLVDemuxer {
 
             offset += lengthSize + naluSize;
         }
-
         if (units.length) {
             let track = this._videoTrack;
             let avcSample = {

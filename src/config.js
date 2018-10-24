@@ -18,12 +18,12 @@
 
 export const defaultConfig = {
     enableWorker: false,
-    enableStashBuffer: true,
+    enableStashBuffer: false,
     stashInitialSize: undefined,
 
     isLive: false,
 
-    lazyLoad: true,
+    lazyLoad: false,
     lazyLoadMaxDuration: 3 * 60,
     lazyLoadRecoverDuration: 30,
     deferLoadAfterSourceOpen: true,
