@@ -291,6 +291,9 @@ class FlvPlayer {
     }
 
     timestampForFrame(frameNumber) {
+        if (!this._transmuxer) {
+          return;
+        }
         this._transmuxer.timestampForFrame(frameNumber);
     }
 
