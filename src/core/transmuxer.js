@@ -135,6 +135,16 @@ class Transmuxer {
         }
     }
 
+    timestampForFrame(frameNumber) {
+        if (this._worker) {
+            this._worker.postMessage({cmd: 'timestamp_for_frame', param: frameNumber});
+        } else {
+            Promise.resolve().then(() => {
+                this._emitter.emit(TransmuxingEvents.FRAME_TIMESTAMP, this._controller.timestampForFrame(frameNumber));
+            });
+        }
+    }
+
     _onInitSegment(type, initSegment) {
         // do async invoke
         Promise.resolve().then(() => {
@@ -246,6 +256,9 @@ class Transmuxer {
                 break;
             case 'logcat_callback':
                 Log.emitter.emit('log', data.type, data.logcat);
+                break;
+            case TransmuxingEvents.FRAME_TIMESTAMP:
+                this._emitter.emit(message.msg, data);
                 break;
             default:
                 break;

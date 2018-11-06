@@ -219,6 +219,10 @@ class TransmuxingController {
         this._enableStatisticsReporter();
     }
 
+    timestampForFrame(frameNumber) {
+        return this._demuxer !== null ? this._demuxer.timestampForFrame(frameNumber) : 0;
+    }
+
     _searchSegmentIndexContains(milliseconds) {
         let segments = this._mediaDataSource.segments;
         let idx = segments.length - 1;

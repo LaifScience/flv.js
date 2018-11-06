@@ -27,6 +27,7 @@ import MSEEvents from '../core/mse-events.js';
 import {ErrorTypes, ErrorDetails} from './player-errors.js';
 import {createDefaultConfig} from '../config.js';
 import {InvalidArgumentException, IllegalStateException} from '../utils/exception.js';
+import VideoFrame from '../lib/VideoFrame';
 
 class FlvPlayer {
 
@@ -166,6 +167,8 @@ class FlvPlayer {
                 // We can defer set currentTime operation after loadedmetadata
             }
         }
+
+        this._initVideoFrame(this);
     }
 
     detachMediaElement() {
@@ -259,6 +262,9 @@ class FlvPlayer {
             }
         });
 
+        this._transmuxer.on(TransmuxingEvents.FRAME_TIMESTAMP, (timestamp) => {
+            this._emitter.emit(TransmuxingEvents.FRAME_TIMESTAMP, timestamp);
+        });
         this._transmuxer.open();
     }
 
@@ -282,6 +288,10 @@ class FlvPlayer {
 
     pause() {
         this._mediaElement.pause();
+    }
+
+    timestampForFrame(frameNumber) {
+        this._transmuxer.timestampForFrame(frameNumber);
     }
 
     get type() {
@@ -603,6 +613,23 @@ class FlvPlayer {
 
     _onvProgress(e) {
         this._checkAndResumeStuckPlayback();
+    }
+
+    _initVideoFrame(self) {
+        if (!this._mediaElement) {
+            return;
+        }
+
+        const id = this._mediaElement.id;
+        const fps = this._mediaInfo ? this._mediaInfo.fps : 30;
+        const video = new VideoFrame({
+            id: id,
+            frameRate: fps,
+            callback: function (response) {
+                self.timestampForFrame(response);
+            }
+        });
+        video.listen('frame');
     }
 
 }

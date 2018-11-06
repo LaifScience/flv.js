@@ -106,6 +106,8 @@ class FLVDemuxer {
 
         this._videoTrack = {type: 'video', id: 1, sequenceNumber: 0, samples: [], length: 0};
         this._audioTrack = {type: 'audio', id: 2, sequenceNumber: 0, samples: [], length: 0};
+        // keep the timestamps for each frame.
+        this._videoTimestamps = new Map();
 
         this._littleEndian = (function () {
             let buf = new ArrayBuffer(2);
@@ -247,8 +249,20 @@ class FLVDemuxer {
         this._mediaInfo.hasVideo = hasVideo;
     }
 
+    get _noOfFrames() {
+        return this._videoTimestamps.size;
+    }
+
     resetMediaInfo() {
         this._mediaInfo = new MediaInfo();
+    }
+
+    timestampForFrame(frameNumber) {
+        if (!this._videoTimestamps || !this._videoTimestamps.has(frameNumber)) {
+            return 0;
+        }
+
+        return this._videoTimestamps.get(frameNumber);
     }
 
     _isInitialMetadataDispatched() {
@@ -831,7 +845,7 @@ class FLVDemuxer {
             // Ignore all the video packets
             return;
         }
-        console.log(tagTimestamp);
+        
         let spec = (new Uint8Array(arrayBuffer, dataOffset, dataSize))[0];
 
         let frameType = (spec & 240) >>> 4;
@@ -1048,6 +1062,9 @@ class FLVDemuxer {
         const lengthSize = this._naluLengthSize;
         let dts = this._timestampBase + tagTimestamp;
         let keyframe = (frameType === 1);  // from FLV Frame Type constants
+
+        const noOfFrames = this._noOfFrames;
+        this._videoTimestamps.set(noOfFrames + 1, tagTimestamp);
 
         while (offset < dataSize) {
             if (offset + 4 >= dataSize) {

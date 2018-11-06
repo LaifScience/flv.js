@@ -92,6 +92,11 @@ let TransmuxingWorker = function (self) {
                 }
                 break;
             }
+            case 'timestamp_for_frame':
+                self.postMessage({
+                    msg: TransmuxingEvents.FRAME_TIMESTAMP,
+                    data: controller !== null ? controller.timestampForFrame(e.data.param) : 0
+                });
         }
     });
 
