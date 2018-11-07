@@ -845,7 +845,7 @@ class FLVDemuxer {
             // Ignore all the video packets
             return;
         }
-        
+
         let spec = (new Uint8Array(arrayBuffer, dataOffset, dataSize))[0];
 
         let frameType = (spec & 240) >>> 4;
