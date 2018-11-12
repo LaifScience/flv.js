@@ -259,6 +259,7 @@ class FLVDemuxer {
 
     timestampForFrame(frameNumber) {
         if (!this._videoTimestamps || !this._videoTimestamps.has(frameNumber)) {
+            console.log('Frame Number: ' + frameNumber + ' not found', 'Map size ' + this._noOfFrames);
             return 0;
         }
 
