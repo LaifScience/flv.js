@@ -631,7 +631,7 @@ class FlvPlayer {
             id: id,
             frameRate: fps,
             callback: function (response) {
-                self.timestampForFrame(response);
+                self.timestampForFrame(response + 1);
             }
         });
         video.listen('frame');
