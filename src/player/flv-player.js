@@ -631,11 +631,11 @@ class FlvPlayer {
             id: id,
             frameRate: fps,
             callback: function (response) {
-              console.log('video tag callback', response);
-              self.timestampForFrame(response);
+              console.log('video tag callback', response)
+                self.timestampForFrame(response + 1);
             }
         });
-        video.listen('time');
+        video.listen('frame');
     }
 
 }

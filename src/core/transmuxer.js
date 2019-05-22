@@ -140,8 +140,7 @@ class Transmuxer {
             this._worker.postMessage({cmd: 'timestamp_for_frame', param: frameNumber});
         } else {
             Promise.resolve().then(() => {
-                // this._emitter.emit(TransmuxingEvents.FRAME_TIMESTAMP, this._controller.timestampForFrame(frameNumber));
-              this._emitter.emit(TransmuxingEvents.FRAME_TIMESTAMP, frameNumber);
+                this._emitter.emit(TransmuxingEvents.FRAME_TIMESTAMP, this._controller.timestampForFrame(frameNumber));
             });
         }
     }
