@@ -624,7 +624,7 @@ class FlvPlayer {
         }
 
         const id = this._mediaElement.id;
-        const baseFps = this._mediaDataSource.fps ? this._mediaDataSource.fps : 30;
+        const baseFps = this._mediaDataSource.fps ? this._mediaDataSource.fps : 20;
         const fps = this._mediaInfo ? this._mediaInfo.fps : baseFps;
         console.log('Using fps: ', fps);
         const video = new VideoFrame({
