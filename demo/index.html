@@ -63,7 +63,7 @@
         var currentFrame = document.getElementById('currentFrame');
 
         function flv_load() {
-            console.log('isSupported: ' + flvjs.isSupported());
+            // console.log('isSupported: ' + flvjs.isSupported());
             if (mediaSourceURL.className === '') {
                 var url = document.getElementById('msURL').value;
     
@@ -86,7 +86,7 @@
                     mediaDataSource[field] = checkbox.checked;
                 }
                 mediaDataSource['url'] = document.getElementById('sURL').value;
-                console.log('MediaDataSource', mediaDataSource);
+                // console.log('MediaDataSource', mediaDataSource);
                 flv_load_mds(mediaDataSource);
             }
         }
@@ -181,7 +181,7 @@
             var sURL = document.getElementById('sURL');
             ls_set('msURL', msURL.value);
             ls_set('sURL', sURL.value);
-            console.log('save');
+            // console.log('save');
         }
 
         function loadSettings() {

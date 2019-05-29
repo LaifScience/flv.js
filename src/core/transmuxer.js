@@ -36,12 +36,18 @@ class Transmuxer {
                 this._worker = work(TransmuxingWorker);
                 this._workerDestroying = false;
                 this._worker.addEventListener('message', this._onWorkerMessage.bind(this));
-                this._worker.postMessage({cmd: 'init', param: [mediaDataSource, config]});
+                this._worker.postMessage({
+                    cmd: 'init',
+                    param: [mediaDataSource, config]
+                });
                 this.e = {
                     onLoggingConfigChanged: this._onLoggingConfigChanged.bind(this)
                 };
                 LoggingControl.registerListener(this.e.onLoggingConfigChanged);
-                this._worker.postMessage({cmd: 'logging_config', param: LoggingControl.getConfig()});
+                this._worker.postMessage({
+                    cmd: 'logging_config',
+                    param: LoggingControl.getConfig()
+                });
             } catch (error) {
                 Log.e(this.TAG, 'Error while initialize transmuxing worker, fallback to inline transmuxing');
                 this._worker = null;
@@ -71,7 +77,9 @@ class Transmuxer {
         if (this._worker) {
             if (!this._workerDestroying) {
                 this._workerDestroying = true;
-                this._worker.postMessage({cmd: 'destroy'});
+                this._worker.postMessage({
+                    cmd: 'destroy'
+                });
                 LoggingControl.removeListener(this.e.onLoggingConfigChanged);
                 this.e = null;
             }
@@ -97,7 +105,9 @@ class Transmuxer {
 
     open() {
         if (this._worker) {
-            this._worker.postMessage({cmd: 'start'});
+            this._worker.postMessage({
+                cmd: 'start'
+            });
         } else {
             this._controller.start();
         }
@@ -105,7 +115,9 @@ class Transmuxer {
 
     close() {
         if (this._worker) {
-            this._worker.postMessage({cmd: 'stop'});
+            this._worker.postMessage({
+                cmd: 'stop'
+            });
         } else {
             this._controller.stop();
         }
@@ -113,7 +125,10 @@ class Transmuxer {
 
     seek(milliseconds) {
         if (this._worker) {
-            this._worker.postMessage({cmd: 'seek', param: milliseconds});
+            this._worker.postMessage({
+                cmd: 'seek',
+                param: milliseconds
+            });
         } else {
             this._controller.seek(milliseconds);
         }
@@ -121,7 +136,9 @@ class Transmuxer {
 
     pause() {
         if (this._worker) {
-            this._worker.postMessage({cmd: 'pause'});
+            this._worker.postMessage({
+                cmd: 'pause'
+            });
         } else {
             this._controller.pause();
         }
@@ -129,7 +146,9 @@ class Transmuxer {
 
     resume() {
         if (this._worker) {
-            this._worker.postMessage({cmd: 'resume'});
+            this._worker.postMessage({
+                cmd: 'resume'
+            });
         } else {
             this._controller.resume();
         }
@@ -137,11 +156,14 @@ class Transmuxer {
 
     timestampForFrame(frameNumber) {
         if (this._worker) {
-            this._worker.postMessage({cmd: 'timestamp_for_frame', param: frameNumber});
+            this._worker.postMessage({
+                cmd: 'timestamp_for_frame',
+                param: frameNumber
+            });
         } else {
             Promise.resolve().then(() => {
                 // this._emitter.emit(TransmuxingEvents.FRAME_TIMESTAMP, this._controller.timestampForFrame(frameNumber));
-              this._emitter.emit(TransmuxingEvents.FRAME_TIMESTAMP, frameNumber);
+                this._emitter.emit(TransmuxingEvents.FRAME_TIMESTAMP, frameNumber);
             });
         }
     }
@@ -215,7 +237,10 @@ class Transmuxer {
 
     _onLoggingConfigChanged(config) {
         if (this._worker) {
-            this._worker.postMessage({cmd: 'logging_config', param: config});
+            this._worker.postMessage({
+                cmd: 'logging_config',
+                param: config
+            });
         }
     }
 

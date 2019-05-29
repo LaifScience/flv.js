@@ -626,12 +626,12 @@ class FlvPlayer {
         const id = this._mediaElement.id;
         const baseFps = this._mediaDataSource.fps ? this._mediaDataSource.fps : 15;
         const fps = this._mediaInfo ? this._mediaInfo.fps : baseFps;
-        console.log('Using fps: ', fps);
+        // console.log('Using fps: ', fps);
         const video = new VideoFrame({
             id: id,
             frameRate: fps,
             callback: function (response) {
-              console.log('video tag callback', response)
+            //   console.log('video tag callback', response)
                 self.timestampForFrame(response + 1);
             }
         });
